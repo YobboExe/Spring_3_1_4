@@ -1,10 +1,32 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Control Users</title>
+
 </head>
 <body>
-$END$
+<table>
+    <div th:each="user : ${users}">
+        <a th:href="@{/admin/user-page/{id}(id=${user.getId()})}"
+        th:text="${user.getUsername() + ', ' + user.getPassword()}">user</a>
+    </div>
+</table>
+
+<div sec:authorize="hasRole('ADMIN')">
+    <form action="/admin/new" method="GET">
+        <input type="submit" value="Add user" />
+    </form>
+</div>
+
+<form th:method="GET" th:action="@{/user/user-page}">
+    <input type="submit" value="My Page"/>
+</form>
+
+<form th:method="POST" th:action="@{/logout}">
+    <input type="submit" value="Sign Out"/>
+</form>
 </body>
 </html>

@@ -1,27 +1,63 @@
-package kata.PP.models;
+package ru.kata.spring.boot_security.demo.models;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 public class User {
 
     @Id
-    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
-    private String name;
+    @Size(min=2, message = "Не меньше 5 знаков")
+    private String password;
 
-    @Column
-    private int age;
+    @Size(min=2, message = "Не меньше 5 знаков")
+    private String username;
 
-    public User(String name, int age) {
-        this.name = name;
-        this.age = age;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Role> authority;
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
     public User() {
 
+    }
+
+    public void addRoleToUser(Role role) {
+        if (authority == null) {
+            authority = new ArrayList<>();
+        }
+        authority.add(role);
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public int getId() {
@@ -32,19 +68,12 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public List<Role> getAuthority() {
+        return authority;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAuthority(List<Role> authority) {
+        this.authority = authority;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
 }
