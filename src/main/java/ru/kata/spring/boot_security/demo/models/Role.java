@@ -1,5 +1,7 @@
 package ru.kata.spring.boot_security.demo.models;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "authorities")
-public class Role {
+public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +25,7 @@ public class Role {
             joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<User> users;
+    private Collection<User> users;
 
     public Role() {
     }
@@ -33,11 +35,11 @@ public class Role {
         this.role = role;
     }
 
-    public List<User> getUsers() {
+    public Collection<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(Collection<User> users) {
         this.users = users;
     }
 
@@ -64,4 +66,8 @@ public class Role {
         users.add(user);
     }
 
+    @Override
+    public String getAuthority() {
+        return role;
+    }
 }

@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.configs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.models.Role;
@@ -29,6 +30,7 @@ public class OnStart implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+
         Role userRole = new Role();
         userRole.setRole("ROLE_USER");
 
@@ -40,14 +42,16 @@ public class OnStart implements ApplicationListener<ContextRefreshedEvent> {
         List<Role> adminRoles = Arrays.asList(adminRole);
         User user = new User();
         user.setUsername("user");
-        user.setPassword("$2a$12$.1gyIHHF4ao.Hyprs90Om.FnO1qYjV5CyaRQgfiZQ5IRAfOdTFNGe");
+        user.setPassword("user");
         user.setAuthority(userRoles);
         userRepository.save(user);
 
         User admin = new User();
         admin.setUsername("admin");
-        admin.setPassword("$2a$12$kxVY8tuJz2HRpgMHpFEwY./Uu4dck28gTYevTK74II964x2FfZmXG");
+        admin.setPassword("admin");
         admin.setAuthority(adminRoles);
+
+
 
         userRepository.save(admin);
 
