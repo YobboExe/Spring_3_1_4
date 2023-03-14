@@ -1,13 +1,14 @@
 package ru.kata.spring.boot_security.demo.models;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -22,6 +23,14 @@ public class User implements UserDetails {
 
     @Size(min=2, message = "Не меньше 5 знаков")
     private String username;
+
+    private String first_name;
+
+    private String last_name;
+
+    private int age;
+
+    private String email;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -96,12 +105,47 @@ public class User implements UserDetails {
         this.id = id;
     }
 
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public Collection<Role> getAuthority() {
         return authority;
+    }
+
+    public String getRole() {
+        return StringUtils.collectionToCommaDelimitedString(authority);
     }
 
     public void setAuthority(Collection<Role> authority) {
         this.authority = authority;
     }
-
 }
