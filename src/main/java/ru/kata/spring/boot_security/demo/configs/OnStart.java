@@ -11,6 +11,7 @@ import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @Component
@@ -20,11 +21,6 @@ public class OnStart implements ApplicationListener<ContextRefreshedEvent> {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -37,8 +33,8 @@ public class OnStart implements ApplicationListener<ContextRefreshedEvent> {
         Role adminRole = new Role();
         adminRole.setRole("ROLE_ADMIN");
 
-        List<Role> userRoles = Arrays.asList(userRole);
-        List<Role> adminRoles = Arrays.asList(adminRole);
+        Collection<Role> userRoles = List.of(userRole);
+        Collection<Role> adminRoles = List.of(adminRole);
         User user = new User();
         user.setUsername("user");
         user.setPassword("user");
@@ -58,7 +54,10 @@ public class OnStart implements ApplicationListener<ContextRefreshedEvent> {
         admin.setEmail("admin@mail.ru");
         admin.setAuthority(adminRoles);
 
-
+        System.out.println("this is the ADMIN AAA role ->>>>" + adminRole.getRole());
+        for (Role role : userRoles) {
+            System.out.println(role.getRole());
+        }
 
         userRepository.save(admin);
 

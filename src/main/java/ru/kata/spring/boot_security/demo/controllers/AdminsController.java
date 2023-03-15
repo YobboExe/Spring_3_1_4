@@ -24,6 +24,7 @@ public class AdminsController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("users", userServiceImpl.allUsers());
         model.addAttribute("user", userServiceImpl.findByUsername(currentUser));
+        model.addAttribute("new_user", new User());
         return "admin-page";
     }
 
@@ -43,7 +44,7 @@ public class AdminsController {
     @PostMapping("/create")
     public String addUser(@ModelAttribute("user") User user) {
         userServiceImpl.saveUser(user);
-        return "redirect:/admin/";
+        return "admin-page";
     }
 
     @GetMapping("/update/{id}")

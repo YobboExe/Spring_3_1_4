@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.models;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
@@ -9,6 +10,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "users")
@@ -49,16 +52,13 @@ public class User implements UserDetails {
 
     }
 
-    public void addRoleToUser(Role role) {
-        if (authority == null) {
-            authority = new ArrayList<>();
-        }
-        authority.add(role);
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> list = new ArrayList<>();
+
+        list.add(new SimpleGrantedAuthority(authority.toString()));
+
+        return list;
     }
 
     public String getPassword() {
@@ -141,8 +141,8 @@ public class User implements UserDetails {
         return authority;
     }
 
-    public String getRole() {
-        return StringUtils.collectionToCommaDelimitedString(authority);
+    public Optional<Role> getRole() {
+        return authority.stream().findFirst();
     }
 
     public void setAuthority(Collection<Role> authority) {
